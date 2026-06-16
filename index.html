@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Grammar Hub - Light UX Premium</title>
+  <style>
+    :root {
+      --bg-body: #f8fafc;       /* Gris lino ultra claro */
+      --bg-white: #ffffff;      /* Blanco puro */
+      --text-main: #0f172a;     /* Azul noche profundo */
+      --text-muted: #64748b;    /* Gris slate secundario */
+      --accent-basic: #10b981;  /* Esmeralda */
+      --accent-inter: #f59e0b;  /* Ámbar */
+      --accent-advanced: #ef4444;/* Carmín */
+      --border-color: #e2e8f0;  /* Separadores */
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --radius-lg: 20px;
+      --radius-sm: 10px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: var(--font); 
+      background-color: var(--bg-body); 
+      color: var(--text-main); 
+      padding-bottom: 60px;
+      min-height: 100vh;
+    }
+
+    /* ---- HERO BANNER MODERNO ---- */
+    .hero-banner {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(241,245,249,0.8)), url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200') center/cover;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+      margin-bottom: 40px;
+    }
+    .hero-content { max-width: 750px; position: relative; }
+    .hero-content h1 { font-size: 3rem; font-weight: 800; color: #0f172a; letter-spacing: -1px; margin-bottom: 12px; }
+    .hero-content p { color: var(--text-muted); font-size: 1.2rem; line-height: 1.6; }
+
+    /* Contador de módulos */
+    .badge-counter {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: var(--text-main);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* ---- CAJA DE BÚSQUEDA UX ---- */
+    .search-container { width: 100%; max-width: 900px; margin: 0 auto 40px auto; padding: 0 20px; }
+    .search-input { 
+      width: 100%; 
+      padding: 18px 26px; 
+      font-size: 1.15rem; 
+      background-color: var(--bg-white); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--radius-lg); 
+      color: var(--text-main); 
+      font-family: var(--font); 
+      transition: var(--transition); 
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.03); 
+    }
+    .search-input:focus { 
+      outline: none; 
+      border-color: #2563eb; 
+      box-shadow: 0 12px 30px -5px rgba(37, 99, 235, 0.15); 
+    }
+    .search-input::placeholder { color: #cbd5e1; }
+
+    .hub-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
+    
+    /* ---- ACORDEONES PREMIUM ---- */
+    .nivel-bloque { 
+      background-color: var(--bg-white); 
+      border-radius: var(--radius-lg); 
+      overflow: hidden; 
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03); 
+      border: 1px solid var(--border-color); 
+      transition: var(--transition); 
+    }
+    .nivel-bloque.hidden { display: none; }
+    
+    .nivel-header { padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .nivel-header:hover { background-color: #fafafa; }
+    
+    .nivel-info h2 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 12px; color: #0f172a; }
+    .nivel-info p { color: var(--text-muted); font-size: 0.95rem; margin-top: 6px; }
+    
+    /* BADGES RESPONSIVE */
+    .badge { padding: 5px 12px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge.basic { background-color: #e6f4ea; color: var(--accent-basic); }
+    .badge.inter { background-color: #fff7ed; color: var(--accent-inter); }
+    .badge.advanced { background-color: #fef2f2; color: var(--accent-advanced); }
+    
+    .flecha-icon { font-size: 1rem; transition: var(--transition); color: var(--text-muted); font-weight: bold; }
+    .nivel-bloque.activo { border-color: #cbd5e1; box-shadow: 0 12px 25px -5px rgba(15, 23, 42, 0.06); }
+    .nivel-bloque.activo .flecha-icon { transform: rotate(180deg); color: var(--text-main); }
+    
+    .nivel-contenido { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); background-color: #f8fafc; }
+
+    /* ---- GRID INTERNA DE LECCIONES ---- */
+    .grid-temas { padding: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) { .grid-temas { grid-template-columns: 1fr; padding: 20px; } }
+    
+    .categoria-gramatica { background-color: var(--bg-white); padding: 22px; border-radius: var(--radius-lg); border-top: 4px solid var(--text-muted); border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .categoria-gramatica.basic-border { border-top-color: var(--accent-basic); }
+    .categoria-gramatica.inter-border { border-top-color: var(--accent-inter); }
+    .categoria-gramatica.advanced-border { border-top-color: var(--accent-advanced); }
+    .categoria-gramatica h3 { font-size: 1.15rem; margin-bottom: 15px; font-weight: 700; color: #1e293b; }
+
+    .lista-lecciones { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    
+    /* BOTONES DE LANZAMIENTO ESTILO CLARO */
+    .leccion-item { 
+      background-color: #f1f5f9; 
+      padding: 14px 18px; 
+      border-radius: var(--radius-sm); 
+      font-size: 0.95rem; 
+      font-weight: 600;
+      cursor: pointer; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      transition: var(--transition); 
+      text-decoration: none; 
+      color: var(--text-main); 
+    }
+    .leccion-item:hover { 
+      background-color: #2563eb; 
+      color: white; 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); 
+    }
+    .leccion-item.hidden { display: none; }
+    .leccion-item .play-btn { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+    .leccion-item:hover .play-btn { opacity: 1; }
+    
+    .no-results { text-align: center; color: var(--text-muted); font-size: 1.15rem; margin-top: 30px; display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER PRINCIPAL CON IMAGEN DE INTERNET -->
+  <header class="hero-banner">
+    <div class="hero-content">
+      <h1>English Grammar Masterclass</h1>
+      <p>La suite definitiva de autoaprendizaje y docencia interactiva. Filtra, selecciona y lanza tus diapositivas en tiempo real durante tus sesiones virtuales.</p>
+      <div class="badge-counter">📚 Programa Integrado: 40 Módulos</div>
+    </div>
+  </header>
+
+  <!-- BUSCADOR -->
+  <div class="search-container">
+    <input type="text" id="inputBuscador" class="search-input" placeholder="🔍 Escribe para buscar un tema (Ej. Present Simple, Inversion, Possessives)...">
+  </div>
+
+  <div id="msgNoResults" class="no-results">No se hallaron coincidencias en el catálogo del curso.</div>
+
+  <main class="hub-container">
+    
+    <!-- BÁSICO -->
+    <div class="nivel-bloque">
+      <div class="nivel-header" onclick="toggleAcordeon(this)">
+        <div class="nivel-info">
+          <h2><span class="badge basic">A1 - A2</span> Basic Grammar</h2>
+          <p>Módulos 1 al 17: Cimientos esenciales del idioma y estructuras cotidianas.</p>
+        </div>
+        <div class="flecha-icon">▼</div>
+      </div>
+      <div class="nivel-contenido">
+        <div class="grid-temas">
+          <div class="categoria-gramatica basic-border">
+            <h3>Foundations & Structures</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=alphabet_numbers" class="leccion-item"><span>1. Alphabet & Numbers</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=verb_to_be" class="leccion-item"><span>2. Verb To Be (Am/Is/Are)</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=pronouns_subject_object" class="leccion-item"><span>3. Subject & Object Pronouns</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=possessives" class="leccion-item"><span>4. Possessive Adj & Pronouns</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=demonstratives" class="leccion-item"><span>5. Demonstratives</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=nouns_plurals" class="leccion-item"><span>6. Nouns & Plurals</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=there_is_are" class="leccion-item"><span>7. There is / There are</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=articles_a_an_the" class="leccion-item"><span>8. Articles: A, An, The</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+          <div class="categoria-gramatica basic-border">
+            <h3>Tiempos de Rutina</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=present_simple" class="leccion-item"><span>9. Present Simple (Routines)</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=adverbs_frequency" class="leccion-item"><span>10. Adverbs of Frequency</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=present_continuous" class="leccion-item"><span>11. Present Continuous</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=past_simple_regular" class="leccion-item"><span>12. Past Simple: Regular</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=past_simple_irregular" class="leccion-item"><span>13. Past Simple: Irregular</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=past_continuous" class="leccion-item"><span>14. Past Continuous</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=future_will" class="leccion-item"><span>15. Future Simple (Will)</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=future_going_to" class="leccion-item"><span>16. Future (Going to)</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=modals_basic" class="leccion-item"><span>17. Basic Modals</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERMEDIO -->
+    <div class="nivel-bloque">
+      <div class="nivel-header" onclick="toggleAcordeon(this)">
+        <div class="nivel-info">
+          <h2><span class="badge inter">B1 - B2</span> Intermediate Grammar</h2>
+          <p>Módulos 18 al 31: Manejo de tiempos compuestos, voz pasiva y fluidez.</p>
+        </div>
+        <div class="flecha-icon">▼</div>
+      </div>
+      <div class="nivel-contenido">
+        <div class="grid-temas">
+          <div class="categoria-gramatica inter-border">
+            <h3>Tiempos Perfectos</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=present_perfect" class="leccion-item"><span>18. Present Perfect Simple</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=present_perfect_continuous" class="leccion-item"><span>19. Present Perfect Continuous</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=past_perfect" class="leccion-item"><span>20. Past Perfect Simple</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=past_perfect_continuous" class="leccion-item"><span>21. Past Perfect Continuous</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=future_continuous" class="leccion-item"><span>22. Future Continuous</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=future_perfect" class="leccion-item"><span>23. Future Perfect Simple</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+          <div class="categoria-gramatica inter-border">
+            <h3>Cláusulas y Estructuras</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=conditionals_012" class="leccion-item"><span>24. Zero & First Conditionals</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=conditional_2" class="leccion-item"><span>25. Second Conditional</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=passive_voice" class="leccion-item"><span>26. Passive Voice Basics</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=reported_speech" class="leccion-item"><span>27. Reported Speech</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=relative_clauses" class="leccion-item"><span>28. Relative Clauses</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=gerunds_infinitives" class="leccion-item"><span>29. Gerunds vs Infinitives</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=modals_deduction" class="leccion-item"><span>30. Modals of Deduction</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=phrasal_verbs_intro" class="leccion-item"><span>31. Phrasal Verbs Foundations</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVANZADO -->
+    <div class="nivel-bloque">
+      <div class="nivel-header" onclick="toggleAcordeon(this)">
+        <div class="nivel-info">
+          <h2><span class="badge advanced">C1 - C2</span> Advanced Grammar</h2>
+          <p>Módulos 32 al 40: Sintaxis compleja de nivel nativo y recursos retóricos formales.</p>
+        </div>
+        <div class="flecha-icon">▼</div>
+      </div>
+      <div class="nivel-contenido">
+        <div class="grid-temas">
+          <div class="categoria-gramatica advanced-border">
+            <h3>Estilo & Énfasis</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=third_conditional" class="leccion-item"><span>32. Third Conditional</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=mixed_conditionals" class="leccion-item"><span>33. Mixed Conditionals</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=inversion" class="leccion-item"><span>34. Inversion Rules</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=cleft_sentences" class="leccion-item"><span>35. Cleft Sentences</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+          <div class="categoria-gramatica advanced-border">
+            <h3>Refinamiento</h3>
+            <ul class="lista-lecciones">
+              <a href="clase.html?tema=subjunctive_mood" class="leccion-item"><span>36. The Subjunctive Mood</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=participle_clauses" class="leccion-item"><span>37. Participle Clauses</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=advanced_modals_perfect" class="leccion-item"><span>38. Perfect Modals</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=ellipsis_substitution" class="leccion-item"><span>39. Ellipsis & Substitution</span><span class="play-btn">Launch ▶</span></a>
+              <a href="clase.html?tema=discourse_markers" class="leccion-item"><span>40. Advanced Discourse Markers</span><span class="play-btn">Launch ▶</span></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function toggleAcordeon(header) {
+      const bloque = header.parentElement;
+      const contenido = header.nextElementSibling;
+      bloque.classList.toggle('activo');
+      contenido.style.maxHeight = bloque.classList.contains('activo') ? contenido.scrollHeight + "px" : "0px";
+    }
+
+    // LÓGICA DE MARCAR EN GRIS SI YA FUE COMPLETADO
+    document.addEventListener("DOMContentLoaded", () => {
+      const lecciones = document.querySelectorAll('.leccion-item');
+      lecciones.forEach(item => {
+        // Obtenemos el ID del tema desde el enlace href
+        const urlParams = new URLSearchParams(item.getAttribute('href').split('?')[1]);
+        const temaId = urlParams.get('tema');
+        
+        // Si está guardado en LocalStorage como completado, lo ponemos gris
+        if (localStorage.getItem(`completado_${temaId}`) === "true") {
+          item.style.backgroundColor = "#e2e8f0"; // Gris claro
+          item.style.color = "#94a3b8";           /* Texto atenuado */
+          item.style.border = "1px dashed #cbd5e1";
+          item.querySelector('.play-btn').innerText = "✓ Review";
+        }
+      });
+    });
+
+    // Buscador Predictivo
+    const inputBuscador = document.getElementById('inputBuscador');
+    const bloquesNivel = document.querySelectorAll('.nivel-bloque');
+    const msgNoResults = document.getElementById('msgNoResults');
+
+    inputBuscador.addEventListener('input', (e) => {
+      const termino = e.target.value.toLowerCase().trim();
+      let totalResultados = 0;
+
+      bloquesNivel.forEach(bloque => {
+        const contenido = bloque.querySelector('.nivel-contenido');
+        const items = bloque.querySelectorAll('.leccion-item');
+        let coincidencias = 0;
+
+        items.forEach(leccion => {
+          const texto = leccion.querySelector('span').innerText.toLowerCase();
+          if (texto.includes(termino)) {
+            leccion.classList.remove('hidden');
+            coincidencias++;
+            totalResultados++;
+          } else {
+            leccion.classList.add('hidden');
+          }
+        });
+
+        if (termino !== "") {
+          if (coincidencias > 0) {
+            bloque.classList.remove('hidden');
+            bloque.classList.add('activo');
+            contenido.style.maxHeight = contenido.scrollHeight + "px";
+          } else {
+            bloque.classList.add('hidden');
+          }
+        } else {
+          bloque.classList.remove('hidden', 'activo');
+          contenido.style.maxHeight = "0px";
+        }
+      });
+      msgNoResults.style.display = (totalResultados === 0 && termino !== "") ? "block" : "none";
+    });
+  </script>
+</body>
+</html>
